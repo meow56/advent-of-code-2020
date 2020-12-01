@@ -20,9 +20,11 @@ function handleFiles() {
   	console.log(numbers);
   	for(let i = 0; i < numbers.length; i++) {
   		for(let j = i + 1; j < numbers.length; j++) {
-  			if(Number(numbers[i][0]) + Number(numbers[j][0]) === 2020) {
-  				console.log(Number(numbers[i][0]) * Number(numbers[j][0]));
-  			}
+  			for(let k = j + 1; k < numbers.length; k++) {
+	  			if(Number(numbers[i][0]) + Number(numbers[j][0]) + Number(numbers[k][0]) === 2020) {
+	  				console.log(Number(numbers[i][0]) * Number(numbers[j][0]) * Number(numbers[k][0]));
+	  			}
+	  		}
   		}
   	}
   }
