@@ -31,4 +31,22 @@ function day2(text) {
 	});
 
 	console.log(validPasswords); // part 1
+
+	let secondValidPasswords = 0;
+	reqPassPair.forEach(function(reqPass) {
+		let reqSplit = reqPass[0].split(" ");
+		let charReq = reqSplit[1];
+		let numSplit = reqSplit[0].split("-");
+		let firstIndex = Number(numSplit[0]);
+		let secondIndex = Number(numSplit[1]);
+
+		let inFirst = reqPass[1][firstIndex - 1] === charReq;
+		let inSecond = reqPass[1][secondIndex - 1] === charReq;
+
+		if((inFirst || inSecond) && !(inFirst && inSecond)) {
+			secondValidPasswords++;
+		}
+	});
+
+	console.log(secondValidPasswords);
 }
