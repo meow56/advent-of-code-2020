@@ -9,12 +9,18 @@ function day3(text) {
 		entry = regex.exec(text);
 	}
 
-	let hitTrees = 0;
-	for(let i = 0; i < trees.length; i++) {
-		let treeCheck = trees[i][(i * 3) % trees[i].length] === "#";
-		if(treeCheck) {
-			hitTrees++;
+	let slopes = [[1, 1], [3, 1], [5, 1], [7, 1], [1, 2]];
+	let hitTrees = [0, 0, 0, 0, 0];
+	for(let j = 0; j < slopes.length; j++) {
+		for(let i = 0; i < trees.length / slopes[j][1]; i++) {
+			let treeCheck = trees[i * slopes[j][1]][(i * slopes[j][0]) % trees[i * slopes[j][1]].length] === "#";
+			if(treeCheck) {
+				hitTrees[j]++;
+			}
 		}
 	}
-	console.log(hitTrees); // part 1
+	let treeProduct = 1;
+	hitTrees.forEach(hit => treeProduct *= hit);
+	console.log(hitTrees[1]); // part 1
+	console.log(treeProduct); // part 2
 }
