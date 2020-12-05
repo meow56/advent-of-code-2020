@@ -1,7 +1,7 @@
 "use strict";
 
 function day5(text) {
-	let regex = /([BFLR]{7})([BFLR]{3})/gm;
+	let regex = /([BF]{7})([LR]{3})/gm;
 	let entry = regex.exec(text);
 	let passes = [];
 	while(entry) { // loop over the text with that regex
@@ -26,12 +26,25 @@ function day5(text) {
 	}
 
 	let highestSeatID = 0;
+	let seatIDs = [];
 	passes.forEach(function(pass) {
 		let row = binaryTo10(pass[1], "F", "B");
 		let column = binaryTo10(pass[2], "L", "R");
+		seatIDs.push((row * 8) + column);
 		if((row * 8) + column > highestSeatID) {
 			highestSeatID = (row * 8) + column;
 		} 
 	});
-	console.log(highestSeatID);
+	console.log(highestSeatID); // part 1
+
+	seatIDs.sort(function(a, b) {
+		return a - b;
+	});
+	let firstID = seatIDs[0];
+	for(let i = 0; i < seatIDs.length; i++) {
+		if(i + firstID !== seatIDs[i]) {
+			console.log(i + firstID); // part 2
+			break;
+		}
+	}
 }
