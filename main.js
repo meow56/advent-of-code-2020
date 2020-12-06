@@ -25,6 +25,9 @@ function handleFiles() {
 			case "5":
 				day5(text);
 				break;
+			case "6":
+				day6(text);
+				break;
 		}
 	}
 }
