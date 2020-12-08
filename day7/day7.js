@@ -35,6 +35,19 @@ function day7(text) {
 			this.hasGold = tempHasGold;
 			return this.hasGold;
 		}
+		this.countTotal = function(total, multiplier) {
+			for(let i = 0; i < this.bags.length; i++) {
+				console.group(this.bags[i][1] + " " + (multiplier * Number(this.bags[i][0])));
+				if(this.bags[i][1].search(/no other/) !== -1) {
+					console.groupEnd();
+					return total;
+				}
+				total += multiplier * Number(this.bags[i][0]);
+				total = findBag(this.bags[i][1]).countTotal(total, multiplier * Number(this.bags[i][0]));
+				console.groupEnd();
+			}
+			return total;
+		}
 	}
 
 	function findBag(name) {
@@ -48,10 +61,14 @@ function day7(text) {
 	let formRules = []; // "formatted" rules
 	rules.forEach(function(rule) {
 		let container = [];
-		let ruleReg = /[0-9] ([a-z ]+) bags?/gm
+		let ruleReg = /([0-9]) ([a-z ]+) bags?|no other bags/gm
 		let newEntry = ruleReg.exec(rule[2]);
 		while(newEntry) {
-			container.push(newEntry[1]);
+			if(newEntry[1]) {
+				container.push([newEntry[1], newEntry[2]]);
+			} else {
+				container.push(["0", "no other"]);
+			}
 			newEntry = ruleReg.exec(rule[2]);
 		}
 		formRules.push(new Bag(rule[1], container));
@@ -59,11 +76,14 @@ function day7(text) {
 
 	let numGold = 0;
 	formRules.forEach(function(rule) {
-		rule.holdsGold();
+		//rule.holdsGold();
 		if(rule.hasGold) {
 			numGold++;
 		}
 	});
 
-	console.log(numGold);
+	console.log(numGold); // part 1
+
+	let shinyGold = findBag("shiny gold");
+	console.log(shinyGold.countTotal(0, 1)); // part 2
 }
