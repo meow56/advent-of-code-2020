@@ -34,6 +34,9 @@ function handleFiles() {
 			case "8":
 				day8(text);
 				break;
+			case "9":
+				day9(text);
+				break;
 		}
 	}
 }
