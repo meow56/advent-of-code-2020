@@ -46,3 +46,21 @@ function handleFiles() {
 		}
 	}
 }
+
+function displayText(text) {
+	const displayDiv = document.getElementById("displayDiv");
+	const displayP = document.createElement("SPAN");
+	displayP.textContent = text;
+	displayDiv.appendChild(displayP);
+	displayDiv.appendChild(document.createElement("BR"));
+}
+
+function clearText() {
+	const displayDiv = document.getElementById("displayDiv");
+	while(displayDiv.firstChild !== null) {
+		displayDiv.removeChild(displayDiv.firstChild);
+	}
+}
+
+
+const devMode = false;

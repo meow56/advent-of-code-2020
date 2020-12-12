@@ -14,6 +14,8 @@ function day11(text) {
 		entry = regex.exec(text);
 	}
 
+	let oldSeats = seats.slice();
+
 	while(true) {
 		let newSeats = [];
 		let isSame = true;
@@ -120,6 +122,97 @@ function day11(text) {
 			});
 			newSeats.push(newRow);
 		});
+
+		if(isSame) {
+			console.log(totalOccupied);
+			break;
+		}
+		seats = newSeats;
+	}
+
+	seats = oldSeats.slice();
+
+	let runs = 0;
+	while(true) {
+		if(devMode) {
+			displayText("");
+			displayText("Iteration " + ++runs);
+		}
+		let newSeats = [];
+		let isSame = true;
+		let totalOccupied = 0;
+		seats.forEach(function(row, rowIndex) {
+			let newRow = [];
+			row.forEach(function(seat, seatIndex) {
+				let directions = [
+					// left      mid     right
+					[[-1, -1], [0, -1], [1, -1]], // up
+					[[-1,  0], [0,  0], [1,  0]], // mid
+					[[-1,  1], [0,  1], [1,  1]]  // down
+				];
+				let sum = 0;
+				directions.forEach(function(vertDir, vertIndex) {
+					vertDir.forEach(function(horizDir, horizIndex) {
+						if(horizDir[0] !== 0 || horizDir[1] !== 0) {
+							let workingRowIndex = rowIndex;
+							let workingSeatIndex = seatIndex;
+							let lookingSeat;
+							try {
+								do {
+									workingRowIndex += horizDir[1];
+									workingSeatIndex += horizDir[0];
+									lookingSeat = seats[workingRowIndex][workingSeatIndex];
+									lookingSeat[0]; // This is just to check the bounds.
+								} while (lookingSeat === ".");
+								if(lookingSeat === "#") {
+									sum++;
+								}
+							} catch (e) {
+								// The only way an error occurs is if we exceed the bounds.
+								// So just do nothing, since the person can't see a seat.
+							}
+						}
+					});
+				});
+
+				switch(seat) {
+					case "L":
+						if(sum === 0) {
+							newRow.push("#");
+						} else {
+							newRow.push("L");
+						}
+						break;
+					case "#":
+						if(sum >= 5) {
+							newRow.push("L");
+						} else {
+							newRow.push("#");
+						}
+						break;
+					case ".":
+						newRow.push(".");
+						break;
+					default:
+						throw "Not L, #, .";
+				}
+				if(isSame) {
+					if(newRow[seatIndex] !== seat) {
+						isSame = false;
+					}
+					if(newRow[seatIndex] === "#") {
+						totalOccupied++;
+					}
+				}
+			});
+			newSeats.push(newRow);
+		});
+
+		if(devMode) {
+			for(let i = 0; i < newSeats.length; i++) {
+				displayText(newSeats[i].join(""));
+			}
+		}
 
 		if(isSame) {
 			console.log(totalOccupied);
