@@ -40,6 +40,9 @@ function handleFiles() {
 			case "10":
 				day10(text);
 				break;
+			case "11":
+				day11(text);
+				break;
 		}
 	}
 }
