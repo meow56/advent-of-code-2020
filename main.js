@@ -52,6 +52,9 @@ function handleFiles() {
 			case "14":
 				day14(text);
 				break;
+			case "15":
+				day15(text);
+				break;
 		}
 	}
 }
