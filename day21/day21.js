@@ -26,6 +26,8 @@ function day21(text) {
 		entry = regex.exec(text);
 	}
 
+	allAllergens.sort();
+
 	function Food(ingredients, ...allergens) {
 		this.ingredients = ingredients;
 		this.allergens = allergens;
@@ -87,4 +89,32 @@ function day21(text) {
 		}
 		return acc;
 	}, 0)); // part 1
+
+	let trueAllergens = [];
+	let notDone = true;
+	while(notDone) {
+		for(let i = 0; i < ingredientPossible.length; i++) {
+			if(ingredientPossible[i].length === 1) {
+				trueAllergens[i] = ingredientPossible[i][0];
+			}
+		}
+
+		for(let i = 0; i < trueAllergens.length; i++) {
+			if(typeof trueAllergens[i] !== "undefined") {
+				for(let j = 0; j < ingredientPossible.length; j++) {
+					if(ingredientPossible[j].includes(trueAllergens[i])) {
+						ingredientPossible[j] = ingredientPossible[j].filter((ing) => ing !== trueAllergens[i]);
+					}
+				}
+			}
+		}
+
+		notDone = trueAllergens.length !== allAllergens.length;
+		if(!notDone) {
+			for(let i = 0; i < trueAllergens.length; i++) {
+				notDone = notDone || typeof trueAllergens[i] === "undefined";
+			}
+		}
+	}
+	console.log(trueAllergens.join()); // part 2
 }
