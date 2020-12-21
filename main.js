@@ -70,6 +70,9 @@ function handleFiles() {
 			case "20":
 				day20(text);
 				break;
+			case "21":
+				day21(text);
+				break;
 		}
 	}
 }
