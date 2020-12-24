@@ -45,8 +45,8 @@ function day24(text) {
 
 	let tiles = [];
 
-	function findTile(coords) {
-		return tiles.find(tile => tile.coords[0] === coords[0] && tile.coords[1] === coords[1]);
+	function findTile(coords, set = tiles) {
+		return set.find(tile => tile.coords[0] === coords[0] && tile.coords[1] === coords[1]);
 	}
 
 	refs.forEach(function(instList) {
@@ -88,4 +88,61 @@ function day24(text) {
 		}
 		return acc;
 	}, 0)); // part 1
+
+	tiles = tiles.filter(elem => elem.black);
+
+	function conway() {
+		let workingTiles = [];
+		tiles.forEach(function(tile) {
+			workingTiles = checked(tile.coords, workingTiles);
+
+			workingTiles = checked([tile.coords[0] + 1, tile.coords[1]    ], workingTiles);
+			workingTiles = checked([tile.coords[0]    , tile.coords[1] + 1], workingTiles);
+			workingTiles = checked([tile.coords[0] + 1, tile.coords[1] - 1], workingTiles);
+			workingTiles = checked([tile.coords[0] - 1, tile.coords[1]    ], workingTiles);
+			workingTiles = checked([tile.coords[0]    , tile.coords[1] - 1], workingTiles);
+			workingTiles = checked([tile.coords[0] - 1, tile.coords[1] + 1], workingTiles);
+		});
+		tiles = workingTiles;
+	}
+	function checked(position, workingTiles) {
+		if(typeof findTile(position, workingTiles) !== "undefined") {
+			return workingTiles; // We've already calculated this tile, no need to do it again.
+		}
+		let tile = findTile(position);
+		let isBlack = typeof tile !== "undefined";
+
+		let blackCount = 0;
+		let e = findTile([position[0] + 1, position[1]]);
+		let ne = findTile([position[0], position[1] + 1]);
+		let se = findTile([position[0] + 1, position[1] - 1]);
+		let w = findTile([position[0] - 1, position[1]]);
+		let nw = findTile([position[0] - 1, position[1] + 1]);
+		let sw = findTile([position[0], position[1] - 1]);
+		blackCount += e ? 1 : 0;
+		blackCount += ne ? 1 : 0;
+		blackCount += se ? 1 : 0;
+		blackCount += w ? 1 : 0;
+		blackCount += nw ? 1 : 0;
+		blackCount += sw ? 1 : 0;
+		if(isBlack) {
+			if(blackCount === 0 || blackCount > 2) {
+				tile.black = false; // goodbye :(
+			} else {
+				workingTiles.push(tile);
+			}
+		} else {
+			if(blackCount === 2) {
+				workingTiles.push(new Tile(position));
+			}
+		}
+		return workingTiles;
+	}
+
+	const DAYS = 100;
+	for(let i = 0; i < DAYS; i++) {
+		conway();
+		let sum = tiles.length
+		console.log(`Day ${i + 1}: ${sum}`);
+	}
 }
