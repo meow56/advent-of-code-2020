@@ -50,4 +50,9 @@ function day25(text) {
 	} else {
 		console.log(`Encryption key: ${cardValue}`); // part 1
 	}
+
+
+
+
+	console.log(`Merry Christmas!`); // part 2
 }
